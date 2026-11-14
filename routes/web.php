@@ -5,7 +5,9 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\MidtransWebhookController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [ShopController::class, 'home'])->name('home');
 Route::get('/produk', [ShopController::class, 'index'])->name('shop.index');
 Route::get('/produk/{product:slug}', [ShopController::class, 'show'])->name('shop.show');
+
+// Webhook Midtrans (dipanggil server Midtrans, tanpa login)
+Route::post('/midtrans/notification', [MidtransWebhookController::class, 'handle'])
+    ->name('midtrans.notification');
 
 // Setelah login: admin ke panel admin, pelanggan ke beranda toko
 Route::get('/dashboard', function () {
@@ -40,6 +46,10 @@ Route::middleware('auth')->group(function () {
     // Riwayat pesanan
     Route::get('/pesanan', [OrderController::class, 'index'])->name('orders.index');
     Route::get('/pesanan/{order}', [OrderController::class, 'show'])->name('orders.show');
+
+    // Pembayaran
+    Route::post('/pesanan/{order}/bayar', [PaymentController::class, 'token'])->name('payment.token');
+    Route::post('/pesanan/{order}/cek-status', [PaymentController::class, 'check'])->name('payment.check');
 });
 
 // Area Admin
