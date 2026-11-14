@@ -34,6 +34,7 @@
                                 <span class="ml-1 px-2 py-0.5 bg-red-600 rounded-full text-xs">{{ $cartCount }}</span>
                             @endif
                         </a>
+                        <a href="{{ route('orders.index') }}" class="hover:text-amber-200">Pesanan</a>
                     @endif
                     <a href="{{ route('profile.edit') }}" class="hover:text-amber-200">{{ auth()->user()->name }}</a>
                     <form method="POST" action="{{ route('logout') }}">

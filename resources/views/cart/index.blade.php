@@ -54,7 +54,6 @@
 
                             <td class="p-3">
                                 <div class="flex items-center gap-2">
-                                    {{-- Kurangi --}}
                                     <form method="POST" action="{{ route('cart.update', $item) }}">
                                         @csrf @method('PATCH')
                                         <input type="hidden" name="quantity" value="{{ max(1, $item->quantity - 1) }}">
@@ -64,7 +63,6 @@
 
                                     <span class="w-8 text-center">{{ $item->quantity }}</span>
 
-                                    {{-- Tambah --}}
                                     <form method="POST" action="{{ route('cart.update', $item) }}">
                                         @csrf @method('PATCH')
                                         <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
@@ -91,7 +89,6 @@
             </table>
         </div>
 
-        {{-- Total --}}
         <div class="mt-4 bg-white rounded shadow p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <div>
                 <div class="text-sm text-gray-500">Total Belanja</div>
@@ -99,10 +96,16 @@
             </div>
             <div class="flex gap-2">
                 <a href="{{ route('shop.index') }}" class="px-5 py-3 bg-gray-300 rounded hover:bg-gray-400">Lanjut Belanja</a>
-                {{-- Tombol checkout diaktifkan di Tahap 6 --}}
-                <button disabled class="px-5 py-3 bg-gray-300 text-gray-500 rounded cursor-not-allowed">
-                    Checkout (segera hadir)
-                </button>
+
+                @if ($hasStockProblem)
+                    <button disabled class="px-5 py-3 bg-gray-300 text-gray-500 rounded cursor-not-allowed">
+                        Checkout
+                    </button>
+                @else
+                    <a href="{{ route('checkout.index') }}" class="px-5 py-3 bg-amber-700 text-white rounded hover:bg-amber-800">
+                        Checkout
+                    </a>
+                @endif
             </div>
         </div>
     @endif
