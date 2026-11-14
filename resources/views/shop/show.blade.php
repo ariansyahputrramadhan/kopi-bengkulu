@@ -35,10 +35,33 @@
                 {!! nl2br(e($product->description ?: 'Belum ada deskripsi.')) !!}
             </div>
 
-            {{-- Tombol keranjang akan diaktifkan di Tahap 5 --}}
-            <button disabled class="mt-6 px-6 py-3 bg-gray-300 text-gray-500 rounded cursor-not-allowed">
-                Tambah ke Keranjang (segera hadir)
-            </button>
+            {{-- Tombol keranjang --}}
+            <div class="mt-6">
+                @guest
+                    <a href="{{ route('login') }}" class="inline-block px-6 py-3 bg-amber-700 text-white rounded hover:bg-amber-800">
+                        Login untuk membeli
+                    </a>
+                @endguest
+
+                @auth
+                    @if (auth()->user()->isAdmin())
+                        <p class="text-sm text-gray-500">Akun admin tidak dapat berbelanja.</p>
+                    @elseif ($product->stock < 1)
+                        <button disabled class="px-6 py-3 bg-gray-300 text-gray-500 rounded cursor-not-allowed">
+                            Stok Habis
+                        </button>
+                    @else
+                        <form method="POST" action="{{ route('cart.store', $product) }}" class="flex items-center gap-3">
+                            @csrf
+                            <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock }}"
+                                   class="w-20 border rounded px-3 py-2">
+                            <button class="px-6 py-3 bg-amber-700 text-white rounded hover:bg-amber-800">
+                                Tambah ke Keranjang
+                            </button>
+                        </form>
+                    @endif
+                @endauth
+            </div>
         </div>
     </div>
 

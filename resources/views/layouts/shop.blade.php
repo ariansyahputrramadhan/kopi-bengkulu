@@ -26,6 +26,14 @@
                 @auth
                     @if (auth()->user()->isAdmin())
                         <a href="{{ route('admin.dashboard') }}" class="hover:text-amber-200">Panel Admin</a>
+                    @else
+                        @php $cartCount = auth()->user()->cartItems()->sum('quantity'); @endphp
+                        <a href="{{ route('cart.index') }}" class="hover:text-amber-200">
+                            Keranjang
+                            @if ($cartCount > 0)
+                                <span class="ml-1 px-2 py-0.5 bg-red-600 rounded-full text-xs">{{ $cartCount }}</span>
+                            @endif
+                        </a>
                     @endif
                     <a href="{{ route('profile.edit') }}" class="hover:text-amber-200">{{ auth()->user()->name }}</a>
                     <form method="POST" action="{{ route('logout') }}">

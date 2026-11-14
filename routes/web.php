@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ShopController;
 use Illuminate\Support\Facades\Route;
@@ -23,6 +24,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Keranjang belanja
+    Route::get('/keranjang', [CartController::class, 'index'])->name('cart.index');
+    Route::post('/keranjang/{product}', [CartController::class, 'store'])->name('cart.store');
+    Route::patch('/keranjang/item/{cartItem}', [CartController::class, 'update'])->name('cart.update');
+    Route::delete('/keranjang/item/{cartItem}', [CartController::class, 'destroy'])->name('cart.destroy');
 });
 
 // Area Admin
